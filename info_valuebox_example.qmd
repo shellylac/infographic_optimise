@@ -1,0 +1,120 @@
+---
+title: "Key facts"
+format:
+  html:
+    theme: cosmo
+    css: info_valuebox.css
+    embed-resources: true
+    toc: false
+    grid:
+      body-width: 1100px
+execute:
+  echo: false
+  message: false
+---
+
+```{r}
+#| label: setup
+source("info_valuebox.R")
+config <- read_value_box_config()
+statements <- readr::read_csv("input/example_statements.csv", show_col_types = FALSE)
+```
+
+## At a glance
+
+These examples use the supplied statements to demonstrate the designs.
+Confirm the figures, reporting periods and sources before publication.
+
+```{r}
+#| label: four-value-boxes
+# Pass display text explicitly; the functions do not interpret the statistics.
+boxes <- list(
+  info_value_box(
+    title = "Risky drinking", value = "2.0\u00d7", value_note = "the proportion",
+    type = "comparative", demographic_var = "sex",
+    context = "Males vs females",
+    description = statements$example_statement[[1]], config = config
+  ),
+  info_value_box(
+    title = "Hospitalisation rates", value = "25.5%", value_note = "higher",
+    type = "comparative", demographic_var = "aria",
+    context = "Remote areas vs major cities",
+    description = statements$example_statement[[2]], config = config
+  ),
+  info_value_box(
+    title = "Risky drinking", value = "5.3%", direction = "decrease",
+    type = "trend", demographic_var = "persons",
+    context = "In adults, 2012 to 2022",
+    description = statements$example_statement[[4]], config = config
+  ),
+  info_value_box(
+    title = "Smoking prevalence", value = "10.5%",
+    type = "domain_statistic", demographic_var = "smoking",
+    context = "In Queensland high school students",
+    description = statements$example_statement[[7]], config = config
+  )
+)
+info_value_box_layout(boxes) # Four cards automatically become two rows of two.
+```
+
+## Three key facts
+
+```{r}
+#| label: three-value-boxes
+three_boxes <- list(
+  info_value_box(
+    title = "Potentially preventable hospitalisations", value = "6.4%",
+    type = "domain_statistic", demographic_var = "hospitalisation",
+    context = "Of all hospitalisations",
+    description = statements$example_statement[[8]], config = config
+  ),
+  info_value_box(
+    title = "Smoking rates", value = "53.4%", direction = "decrease",
+    type = "trend", demographic_var = "male",
+    context = "In adult males",
+    description = statements$example_statement[[9]], config = config
+  ),
+  info_value_box(
+    title = "Hospitalisations", value = "51.5%", direction = "increase",
+    type = "trend", demographic_var = "persons",
+    context = "Adult hospitalisation rates",
+    description = statements$example_statement[[5]], config = config
+  )
+)
+info_value_box_layout(three_boxes) # One row of three on a wide page.
+```
+
+## Two key facts
+
+```{r}
+#| label: two-value-boxes
+info_value_box_layout(boxes[[1]], boxes[[2]]) # One row of two.
+```
+
+## Creating boxes from a table
+
+For pages maintained as data, use one row per box and column names matching
+the function arguments. The same config is shared across all boxes.
+
+```{r}
+#| label: table-driven-value-boxes
+#| echo: true
+facts <- tibble::tibble(
+  title = c("Hospitalisation rates", "Chronic disease hospitalisations"),
+  value = c("18.9%", "18.0%"),
+  type = c("comparative", "trend"),
+  demographic_var = c("seifa", "persons"),
+  context = c("Most disadvantaged vs most advantaged areas", "Seven chronic diseases"),
+  description = statements$example_statement[c(3, 6)],
+  value_note = list("higher", NULL),
+  direction = list(NULL, "decrease")
+)
+facts |>
+  purrr::pmap(info_value_box, config = config) |>
+  info_value_box_layout()
+```
+
+## Main page content
+
+The page narrative and dashboards can follow this summary section.
+See `README.md` for setup, config editing and integration into a website.

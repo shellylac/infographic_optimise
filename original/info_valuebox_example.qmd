@@ -1,0 +1,54 @@
+---
+title: "Key facts"
+format:
+  html:
+    embed-resources: true
+    toc: false
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+```{r}
+#| label: load-value-box-functions
+source("info_valuebox.R")
+info_value_box_styles()
+```
+
+## 2 x 2 layout
+
+```{r}
+#| label: display-value-boxes
+
+boxes <- list(
+  info_value_box("All cause mortality", 39.9),
+  info_value_box(
+    "All cause mortality",
+    4.0,
+    stat = "ratio",
+    measure = "Age-specific mortality rates",
+    group = "85+ years",
+    reference = "75\u201384 years"
+  ),
+  info_value_box("COPD", -12.3, type = "trend", from = 2010, to = 2020),
+  info_value_box("Dementia", 25.2)
+)
+
+# Layout is controlled here. All layouts stack below 640px.
+do.call(info_value_box_layout, c(boxes, list(columns = 2)))
+```
+
+## 3 cards in a row
+```{r alt_layouts}
+# Alternatives using the same cards:
+do.call(info_value_box_layout, boxes[1:3]) # three cards in one row
+# do.call(info_value_box_layout, boxes[1:2]) # two cards in one row
+
+# Other comparison types use the actual statistic with explicit group labels:
+# info_value_box("COPD", value = remoteness_difference,
+#   group = "Remote areas", reference = "Major cities")
+# info_value_box("COPD", value = socioeconomic_difference,
+#   group = "Most disadvantaged areas", reference = "Most advantaged areas")
+# Add the reporting period, source and methods when used on a production page.
+```

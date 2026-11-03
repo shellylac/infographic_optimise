@@ -1,0 +1,18 @@
+id,type,demographic_var,highligh_colour,flaticon_icon_name
+1,comparison,sex,purple,mars-and-venus
+2,comparison,age,mid_blue,people-arrows
+3,comparison,aria,brown,mountain-city
+4,comparison,seifa,teal,scale-unbalanced
+5,trend,persons,green,arrow-trend-up / arrow-trend-down
+6,trend,male,dark_purple,arrow-trend-up / arrow-trend-down
+7,trend,female,light_purple,arrow-trend-up / arrow-trend-down
+8,trend,adult,mid_blue,arrow-trend-up / arrow-trend-down
+9,trend,child,mid_blue,arrow-trend-up / arrow-trend-down
+10,trend,aria_class,brown,arrow-trend-up / arrow-trend-down
+11,trend,seifa_class,teal,arrow-trend-up / arrow-trend-down
+12,domain_stat,general,dark_blue,chart-pie
+13,domain_stat,chronic_disease,dark_blue,stethoscope
+14,domain_stat,mortality,dark_blue,heart-pulse
+15,domain_stat,hospitalistion,dark_blue,hospital
+16,domain_stat,smoking,dark_blue,smoking
+17,domain_stat,weigh,dark_blue,weight-scale
