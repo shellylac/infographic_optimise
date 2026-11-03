@@ -3,6 +3,9 @@
    References: https://www.design-system.health.qld.gov.au/styles/typography
                https://www.design-system.health.qld.gov.au/styles/colour */
 .info-value-box-region {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: var(--info-value-box-max-width, 48rem);
   container-type: inline-size;
   margin-block: 0.75rem 1rem;
 }

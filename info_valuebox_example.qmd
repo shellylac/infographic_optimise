@@ -7,7 +7,7 @@ format:
     embed-resources: true
     toc: false
     grid:
-      body-width: 1100px
+      body-width: 768px
 execute:
   echo: false
   message: false
