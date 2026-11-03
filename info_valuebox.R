@@ -1,15 +1,15 @@
 # HTML value boxes for Quarto (Bootstrap 5) and bslib pages.
-# Dependencies: bslib, bsicons, htmltools, readr, dplyr.
+# Dependencies: bslib, htmltools, readr, dplyr; bsicons and/or fontawesome.
 # Include info_valuebox.css in the page's Quarto YAML. See README.md.
 
 #' Read and validate the team's style lookup once, at page setup.
-#' One row per type/demographic_var pair; icons are Bootstrap icon names.
+#' One row per type/demographic_var pair; icon_library selects bootstrap or fontawesome.
 read_value_box_config <- function(path = "valuebox_config.csv") {
   config <- readr::read_csv(
     path, col_types = readr::cols(.default = readr::col_character()),
     show_col_types = FALSE, trim_ws = TRUE
   )
-  required <- c("type", "demographic_var", "highlight_colour", "icon",
+  required <- c("type", "demographic_var", "highlight_colour", "icon_library", "icon",
                 "icon_decrease")
   if (!all(required %in% names(config))) {
     stop("Config must contain: ", paste(required, collapse = ", "), call. = FALSE)
@@ -21,6 +21,10 @@ read_value_box_config <- function(path = "valuebox_config.csv") {
   if (any(!config$type %in% c("comparative", "trend", "domain_statistic"))) {
     stop("Config type must be comparative, trend or domain_statistic.", call. = FALSE)
   }
+  if (anyNA(config$icon_library) ||
+      any(!config$icon_library %in% c("bootstrap", "fontawesome"))) {
+    stop("Config icon_library must be bootstrap or fontawesome.", call. = FALSE)
+  }
   if (anyDuplicated(config[c("type", "demographic_var")])) {
     stop("Config has duplicate type/demographic_var pairs.", call. = FALSE)
   }
@@ -31,13 +35,34 @@ read_value_box_config <- function(path = "valuebox_config.csv") {
   if (anyNA(trends$icon_decrease) || any(!nzchar(trends$icon_decrease))) {
     stop("Trend rows need icon_decrease as well as icon (increase).", call. = FALSE)
   }
-  icons <- unique(unlist(config[c("icon", "icon_decrease")], use.names = FALSE))
-  for (icon in icons[!is.na(icons) & nzchar(icons)]) {
-    tryCatch(bsicons::bs_icon(icon), error = function(e) {
-      stop("Unknown Bootstrap icon in config: ", icon, call. = FALSE)
-    })
+  icons <- dplyr::distinct(config, .data$icon_library, .data$icon, .data$icon_decrease)
+  for (i in seq_len(nrow(icons))) {
+    icon_names <- unique(c(icons$icon[[i]], icons$icon_decrease[[i]]))
+    for (name in icon_names[!is.na(icon_names) & nzchar(icon_names)]) {
+      .value_box_icon(name, icons$icon_library[[i]])
+    }
   }
   config
+}
+
+# Both providers return inline SVGs that inherit the configured highlight colour.
+.value_box_icon <- function(name, library) {
+  package <- switch(library, bootstrap = "bsicons", fontawesome = "fontawesome",
+                    stop("icon_library must be bootstrap or fontawesome.", call. = FALSE))
+  if (!requireNamespace(package, quietly = TRUE)) {
+    stop("Install the '", package, "' R package to use ", library, " icons.", call. = FALSE)
+  }
+  if (library == "fontawesome") {
+    metadata <- fontawesome::fa_metadata()
+    if (!name %in% c(metadata$icon_names, metadata$icon_names_full)) {
+      stop("Unknown Font Awesome icon: ", name,
+           ". Choose a name included in fontawesome::fa_metadata().", call. = FALSE)
+    }
+    return(fontawesome::fa(name, height = "1em", prefer_type = "solid", a11y = "deco"))
+  }
+  tryCatch(bsicons::bs_icon(name, size = "1em", a11y = "deco"), error = function(e) {
+    stop("Unknown Bootstrap icon: ", name, call. = FALSE)
+  })
 }
 
 .value_box_text <- function(x, name) {
@@ -107,7 +132,7 @@ info_value_box <- function(title, value, type, demographic_var, context,
       class = "info-value-box-heading",
       tags$span(class = "info-value-box-title", title),
       tags$span(class = "info-value-box-icon", `aria-hidden` = "true",
-                bsicons::bs_icon(icon, size = "1em", a11y = "deco"))
+                .value_box_icon(icon, style$icon_library[[1]]))
     ),
     value = tags$p(
       tags$span(class = "info-value-box-number", value),

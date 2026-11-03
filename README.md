@@ -2,15 +2,16 @@
 
 Use these components at the top of an HTML Quarto subpage, before the narrative
 and dashboards. They wrap `bslib::value_box()` and `bslib::layout_column_wrap()`;
-no Shiny server is needed. All icons are inline Bootstrap SVGs from `bsicons`,
-so rendering does not download icons or load an external icon font.
+no Shiny server is needed. Icons are inline SVGs from `bsicons` (Bootstrap)
+or `fontawesome`, selected per config row. Rendering does not download icons
+or load an external icon font.
 
 ## Setup
 
 Install the packages once in R:
 
 ```r
-install.packages(c("bslib", "bsicons", "htmltools", "readr", "dplyr", "purrr"))
+install.packages(c("bslib", "bsicons", "fontawesome", "htmltools", "readr", "dplyr", "purrr"))
 ```
 
 Install Quarto and its usual R rendering packages (`knitr`, `rmarkdown`) if they
@@ -140,10 +141,26 @@ at or below the stacking threshold above display one card per row.
 
 `valuebox_config.csv` is the working config derived from the supplied template.
 Each type/demographic pair must be unique. To add a category, add a row with a
-six-digit hex `highlight_colour` and a valid Bootstrap `icon` name. For trend
+six-digit hex `highlight_colour`, an `icon_library` of `bootstrap` or
+`fontawesome`, and a valid `icon` name from that library. For trend
 rows, `icon` is the increase icon; also set `icon_decrease`.
 The reader checks these fields and icon availability, and fails with an error
 for invalid configuration. Unknown category pairs also fail explicitly.
+
+For example, these rows mix libraries:
+
+```csv
+type,demographic_var,highlight_colour,icon_library,icon,icon_decrease
+comparative,sex,#91358C,fontawesome,mars-and-venus,
+domain_statistic,general,#16445B,bootstrap,pie-chart,
+trend,persons,#008540,fontawesome,arrow-trend-up,arrow-trend-down
+```
+
+The library applies to both icons in a trend row. Changing providers requires
+changing the icon names to match that provider; the valuebox calls do not change.
+If you have your own older working config, add the `icon_library` column and
+set it to `bootstrap` for rows containing the previous Bootstrap names.
+Only the selected provider's R package is required to render its rows.
 
 The original files under `input/` are unchanged. Changes in the working config:
 
@@ -152,15 +169,19 @@ The original files under `input/` are unchanged. Changes in the working config:
 - `comparison` becomes `comparative`; `domain_stat` becomes `domain_statistic`.
   Both original type names remain accepted in `info_value_box()` calls.
 - `hospitalistion` becomes `hospitalisation`; `weigh` becomes `weight`.
-- Flaticon names are replaced by Bootstrap equivalents. Approximate symbols
-  include `lungs` for smoking, `clipboard2-pulse` for chronic disease,
-  `speedometer2` for weight and `bar-chart-steps` for socioeconomic comparison.
-  These can be changed without editing the R code.
+- The names in the original `flaticon_icon_name` column are Font Awesome names.
+  The working config restores all of these names and sets `icon_library` to
+  `fontawesome`, including `smoking`, `stethoscope` and `weight-scale`.
+  Trend names are separated into the increase and decrease columns.
 - Row IDs are preserved, including the example adult hospitalisation trend
   linked to `persons` (id 5). Choose `adult` (id 8) if your team prefers the
   age-specific colour for that fact.
 
-Browse names at [Bootstrap Icons](https://icons.getbootstrap.com/).
+Browse names at [Bootstrap Icons](https://icons.getbootstrap.com/) or the
+[Font Awesome R icon reference](https://rstudio.github.io/fontawesome/articles/icon-reference.html).
+For Font Awesome, use names bundled with the installed R package; paid Pro
+icons or newer names found on the main website may not be included. Available
+names can be listed in R with `fontawesome::fa_metadata()$icon_names`.
 Icons decorate text that already communicates the meaning; they are hidden
 from screen readers. Text and direction words communicate meaning without colour.
 
@@ -197,7 +218,7 @@ Run `Rscript tests/check_valueboxes.R` for the config, selection, escaping and
 layout checks. Render the Quarto example after changing CSS or upgrading bslib,
 and inspect the wide and narrow layouts in a browser.
 
-Validated with R 4.6.1, bslib 0.12.0 and bsicons 0.1.2. The Quarto example
+Validated with R 4.6.1, bslib 0.12.0, bsicons 0.1.2 and fontawesome 0.5.3. The Quarto example
 renders successfully and the R checks pass. Automated visual inspection was
 blocked because the available browser tool does not allow local file URLs;
 the generated HTML is provided for local visual review.

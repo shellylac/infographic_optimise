@@ -20,8 +20,13 @@ for (i in seq_len(nrow(config))) {
     expected_icon <- if (is.na(direction) || direction == "increase") row$icon else
       row$icon_decrease
     html <- as.character(box)
+    expected_svg <- as.character(if (row$icon_library[[1]] == "fontawesome") {
+      fontawesome::fa(expected_icon, height = "1em", prefer_type = "solid", a11y = "deco")
+    } else {
+      bsicons::bs_icon(expected_icon, size = "1em", a11y = "deco")
+    })
     stopifnot(grepl(row$highlight_colour, html, fixed = TRUE),
-              grepl(paste0("bi-", expected_icon, " "), html, fixed = TRUE))
+              grepl(expected_svg, html, fixed = TRUE))
   }
 }
 
@@ -60,8 +65,32 @@ bad <- config
 bad$highlight_colour[1] <- "purple"
 check_bad_config(bad, "hex colours")
 bad <- config
+bad$icon_library[1] <- "bootstrap"
 bad$icon[1] <- "not-a-bootstrap-icon"
 check_bad_config(bad, "Unknown Bootstrap icon")
+bad <- config
+bad$icon_library[1] <- "fontawesome"
+bad$icon[1] <- "not-a-fontawesome-icon"
+check_bad_config(bad, "Unknown Font Awesome icon")
+bad <- config
+bad$icon_library[1] <- "unknown-library"
+check_bad_config(bad, "icon_library must be")
+
+# Mix libraries in one configuration, including a Bootstrap trend decrease.
+mixed <- config
+mixed$icon_library[c(1, 5)] <- "bootstrap"
+mixed$icon[c(1, 5)] <- c("gender-ambiguous", "graph-up-arrow")
+mixed$icon_decrease[5] <- "graph-down-arrow"
+path <- tempfile(fileext = ".csv")
+readr::write_csv(mixed, path)
+mixed <- read_value_box_config(path)
+unlink(path)
+bootstrap_box <- info_value_box("Comparison", "10%", "comparative", "sex",
+                                "Males vs females", "Statement", mixed)
+bootstrap_trend <- info_value_box("Trend", "10%", "trend", "persons",
+                                  "Population", "Statement", mixed, direction = "decrease")
+stopifnot(grepl("bi-gender-ambiguous", as.character(bootstrap_box), fixed = TRUE),
+          grepl("bi-graph-down-arrow", as.character(bootstrap_trend), fixed = TRUE))
 
 # Contrast of context text on the fixed white card background (WCAG formula).
 rgb <- grDevices::col2rgb(config$highlight_colour) / 255

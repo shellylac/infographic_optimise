@@ -17,7 +17,12 @@ execute:
 #| label: setup
 source("info_valuebox.R")
 config <- read_value_box_config()
-statements <- readr::read_csv("input/example_statements.csv", show_col_types = FALSE)
+# Each config row selects icon_library = "fontawesome" or "bootstrap".
+# The supplied config uses the original Font Awesome names; calls below stay the same.
+statements <- readr::read_csv(
+  "input/example_statements.csv",
+  show_col_types = FALSE
+)
 ```
 
 ## At a glance
@@ -30,28 +35,43 @@ Confirm the figures, reporting periods and sources before publication.
 # Pass display text explicitly; the functions do not interpret the statistics.
 boxes <- list(
   info_value_box(
-    title = "Risky drinking", value = "2.0\u00d7", value_note = "the proportion",
-    type = "comparative", demographic_var = "sex",
+    title = "Risky drinking",
+    value = "2.0\u00d7",
+    value_note = "the proportion",
+    type = "comparative",
+    demographic_var = "sex",
     context = "Males vs females",
-    description = statements$example_statement[[1]], config = config
+    description = statements$example_statement[[1]],
+    config = config
   ),
   info_value_box(
-    title = "Hospitalisation rates", value = "25.5%", value_note = "higher",
-    type = "comparative", demographic_var = "aria",
+    title = "Hospitalisation rates",
+    value = "25.5%",
+    value_note = "higher",
+    type = "comparative",
+    demographic_var = "aria",
     context = "Remote areas vs major cities",
-    description = statements$example_statement[[2]], config = config
+    description = statements$example_statement[[2]],
+    config = config
   ),
   info_value_box(
-    title = "Risky drinking", value = "5.3%", direction = "decrease",
-    type = "trend", demographic_var = "persons",
+    title = "Risky drinking",
+    value = "5.3%",
+    direction = "decrease",
+    type = "trend",
+    demographic_var = "persons",
     context = "In adults, 2012 to 2022",
-    description = statements$example_statement[[4]], config = config
+    description = statements$example_statement[[4]],
+    config = config
   ),
   info_value_box(
-    title = "Smoking prevalence", value = "10.5%",
-    type = "domain_statistic", demographic_var = "smoking",
+    title = "Smoking prevalence",
+    value = "10.5%",
+    type = "domain_statistic",
+    demographic_var = "smoking",
     context = "In Queensland high school students",
-    description = statements$example_statement[[7]], config = config
+    description = statements$example_statement[[7]],
+    config = config
   )
 )
 info_value_box_layout(boxes) # Four cards automatically become two rows of two.
@@ -63,22 +83,33 @@ info_value_box_layout(boxes) # Four cards automatically become two rows of two.
 #| label: three-value-boxes
 three_boxes <- list(
   info_value_box(
-    title = "Potentially preventable hospitalisations", value = "6.4%",
-    type = "domain_statistic", demographic_var = "hospitalisation",
+    title = "Potentially preventable hospitalisations",
+    value = "6.4%",
+    type = "domain_statistic",
+    demographic_var = "hospitalisation",
     context = "Of all hospitalisations",
-    description = statements$example_statement[[8]], config = config
+    description = statements$example_statement[[8]],
+    config = config
   ),
   info_value_box(
-    title = "Smoking rates", value = "53.4%", direction = "decrease",
-    type = "trend", demographic_var = "male",
+    title = "Smoking rates",
+    value = "53.4%",
+    direction = "decrease",
+    type = "trend",
+    demographic_var = "male",
     context = "In adult males",
-    description = statements$example_statement[[9]], config = config
+    description = statements$example_statement[[9]],
+    config = config
   ),
   info_value_box(
-    title = "Hospitalisations", value = "51.5%", direction = "increase",
-    type = "trend", demographic_var = "persons",
+    title = "Hospitalisations",
+    value = "51.5%",
+    direction = "increase",
+    type = "trend",
+    demographic_var = "persons",
     context = "Adult hospitalisation rates",
-    description = statements$example_statement[[5]], config = config
+    description = statements$example_statement[[5]],
+    config = config
   )
 )
 info_value_box_layout(three_boxes) # One row of three on a wide page.
@@ -104,7 +135,10 @@ facts <- tibble::tibble(
   value = c("18.9%", "18.0%"),
   type = c("comparative", "trend"),
   demographic_var = c("seifa", "persons"),
-  context = c("Most disadvantaged vs most advantaged areas", "Seven chronic diseases"),
+  context = c(
+    "Most disadvantaged vs most advantaged areas",
+    "Seven chronic diseases"
+  ),
   description = statements$example_statement[c(3, 6)],
   value_note = list("higher", NULL),
   direction = list(NULL, "decrease")
