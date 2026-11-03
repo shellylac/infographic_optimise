@@ -114,8 +114,27 @@ after the arguments; the Quarto example demonstrates this.
 Cards stack when the containing region is at most 44rem wide (about 704px at
 the usual root font size), or the viewport is that narrow. This supports
 sidebars as well as phones. Heights follow content, with equal heights within
-each row; there are no fixed heights to clip longer text. Use a wide page body
-for the three-column design (the example uses 1100px).
+each row; there are no fixed heights to clip longer text.
+
+The entire valuebox section is capped at 48rem (about 768px at the usual root
+font size), and never exceeds its parent text column. The example uses the
+equivalent 768px limit for the page body. On your website, place the section inside
+the normal text column rather than a full-width Quarto column.
+
+To match your website's exact reading-width limit, set this variable in the
+site stylesheet, loaded after `info_valuebox.css`:
+
+```css
+.info-value-box-region {
+  --info-value-box-max-width: 70ch;
+}
+```
+
+`ch` measures the width of a zero in the current font, so it approximates a
+character limit rather than counting actual characters. You can also use the
+site's existing CSS width variable here. The section stays aligned with the
+start of the text column and shrinks automatically on smaller devices. Widths
+at or below the stacking threshold above display one card per row.
 
 ## Editing the config
 
@@ -147,12 +166,13 @@ from screen readers. Text and direction words communicate meaning without colour
 
 ## Styling and maintenance
 
-Cards use compact padding (0.75rem vertically) and small internal gaps to keep
-the summary section short, with prominent 2.75rem statistics, bold 1.25rem
-headings and 3rem icons. Statements use smaller 0.8125rem text with a 1.45 line
+Cards use compact padding (0.5rem vertically), 0.25rem internal gaps and 0.5rem
+between cards to keep the summary section short, with prominent 2.125rem
+statistics, bold 1rem headings and 2.25rem icons. Statements use smaller
+0.75rem text with a 1.4 line
 height. Comparative context lines use
 the pattern `"Focal group vs reference group"` (also accepting `VS` or `vs.`).
-The focal group is 1.25rem and bold; the remaining comparison is 1.125rem
+The focal group is 1rem and bold; the remaining comparison is 0.9375rem
 and medium weight. Other context text is displayed as supplied.
 
 All styling is in `info_valuebox.css` and scoped to these components. It uses

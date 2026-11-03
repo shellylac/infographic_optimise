@@ -135,7 +135,7 @@ info_value_box_layout <- function(...) {
   columns <- if (length(boxes) <= 3L) length(boxes) else 2L
   grid <- do.call(bslib::layout_column_wrap, c(
     unname(boxes), list(width = 1 / columns, heights_equal = "row",
-                       fill = FALSE, gap = "0.75rem", class = "info-value-box-grid")
+                       fill = FALSE, gap = "0.5rem", class = "info-value-box-grid")
   ))
   htmltools::tags$div(class = "info-value-box-region", grid)
 }
