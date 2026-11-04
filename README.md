@@ -1,5 +1,12 @@
 # PHD key-fact value boxes
 
+For a comparison of five single-card page layouts, see
+[`single_valuebox_options/single_valuebox_example.qmd`](single_valuebox_options/single_valuebox_example.qmd).
+Render it in RStudio or run `quarto render single_valuebox_example.qmd` from that
+folder to recreate the self-contained HTML comparison page. The folder retains
+only the Quarto, R and CSS sources; it also uses the existing reduced-footprint
+component files and configuration in the parent project.
+
 Use these components at the top of an HTML Quarto subpage, before the narrative
 and dashboards. They wrap `bslib::value_box()` and `bslib::layout_column_wrap()`;
 no Shiny server is needed. Icons are inline SVGs from `bsicons` (Bootstrap)

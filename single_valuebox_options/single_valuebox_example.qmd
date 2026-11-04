@@ -1,0 +1,27 @@
+---
+title: "Single valuebox layout options"
+format:
+  html:
+    theme: cosmo
+    embed-resources: true
+    css:
+      - ../original_design_20pct/info_valuebox.css
+      - single_valuebox.css
+      - preview.css
+    grid:
+      body-width: 704px
+execute:
+  echo: false
+  message: false
+---
+
+<!-- Render from this folder with Quarto/RStudio. Keep examples.R, both local
+CSS files, ../original_design_20pct/ and ../valuebox_config.csv in place. -->
+
+All five options use the same fact and reduced-footprint design. Resize the
+browser to compare narrow layouts. Figures are demonstration content.
+
+```{r}
+source("examples.R")
+comparison()
+```

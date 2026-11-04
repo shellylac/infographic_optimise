@@ -1,0 +1,10 @@
+body { margin: 0; padding: 2rem 1rem; font-family: "Segoe UI", Arial, sans-serif; color: #131212; background: #fff; }
+main { max-width: 44rem; margin-inline: auto; }
+h1 { font-size: 2rem; }
+h2 { margin-top: 2.5rem; font-size: 1.3rem; }
+h3 { margin: 0 0 0.75rem; font-size: 1.2rem; }
+h4 { margin: 1rem 0 0.5rem; font-size: 1rem; }
+p { line-height: 1.5; }
+.page-sample { border-block: 1px dashed #bcc5cc; padding-block: 1rem; }
+.page-sample > p:last-child { margin-bottom: 0; }
+@media print { section { break-inside: avoid; } }

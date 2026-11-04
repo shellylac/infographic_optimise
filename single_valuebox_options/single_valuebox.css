@@ -1,0 +1,32 @@
+/* Load after original_design_20pct/info_valuebox.css. Opt-in wrappers only. */
+.single-box-demo { container-type: inline-size; }
+.single-box-demo .slim-value-box-region { max-inline-size: 100%; }
+.single-box-demo--capped .slim-value-box-region,
+.single-box-demo--centred .slim-value-box-region { max-inline-size: 28rem; }
+.single-box-demo--centred .slim-value-box-region { margin-inline: auto; }
+.single-box-demo--column .slim-value-box-region {
+  inline-size: calc((100% - 0.375rem) / 2);
+}
+/* Keep all the existing card content; use the width for a side-by-side statement. */
+@container (min-width: 38.01rem) {
+  .single-box-demo--horizontal .value-box-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    column-gap: 1rem;
+  }
+  .single-box-demo--horizontal .slim-value-box-heading { grid-column: 1; grid-row: 1; }
+  .single-box-demo--horizontal .value-box-value { grid-column: 1; grid-row: 2; }
+  .single-box-demo--horizontal .slim-value-box-context { grid-column: 1; grid-row: 3; }
+  .single-box-demo--horizontal .slim-value-box-description {
+    grid-column: 2; grid-row: 1 / 4;
+    border-top: 0; border-inline-start: 1px solid var(--QLD-color-light__border, #bedfff);
+    padding-block: 0; padding-inline-start: 1rem;
+    align-self: center;
+  }
+}
+@container (max-width: 38rem) {
+  .single-box-demo--column .slim-value-box-region { inline-size: 100%; }
+}
+@media (max-width: 38rem) {
+  .single-box-demo--column .slim-value-box-region { inline-size: 100%; }
+}
