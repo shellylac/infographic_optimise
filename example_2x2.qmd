@@ -1,0 +1,105 @@
+---
+title: "Key facts"
+format:
+  html:
+    theme: cosmo
+    css: original_design_20pct/info_valuebox.css
+    embed-resources: true
+    toc: false
+    grid:
+      body-width: 850px
+execute:
+  echo: false
+  message: false
+---
+
+```{r}
+#| label: setup
+source("original_design_20pct/info_valuebox.R")
+config <- read_value_box_config()
+# Each config row selects icon_library = "fontawesome" or "bootstrap".
+# The supplied config uses the original Font Awesome names; calls below stay the same.
+statements <- readr::read_csv(
+  "original_design_20pct/example_statements_short.csv",
+  show_col_types = FALSE
+)
+```
+
+# At a glance
+
+```{r}
+#| label: four-value-boxes
+# Pass display text explicitly; the functions do not interpret the statistics.
+boxes <- list(
+  info_value_box(
+    title = "Risky drinking",
+    value = "2.0\u00d7",
+    value_note = "the proportion",
+    type = "comparative",
+    demographic_var = "sex",
+    context = "Males vs females",
+    description = statements$example_statement[[1]],
+    config = config
+  ),
+  info_value_box(
+    title = "Hospitalisation rates",
+    value = "25.5%",
+    value_note = "higher",
+    type = "comparative",
+    demographic_var = "aria",
+    context = "Remote areas vs major cities",
+    description = statements$example_statement[[2]],
+    config = config
+  ),
+  info_value_box(
+    title = "Risky drinking",
+    value = "5.3%",
+    direction = "decrease",
+    type = "trend",
+    demographic_var = "persons",
+    context = "In adults, 2012 to 2022",
+    description = statements$example_statement[[4]],
+    config = config
+  ),
+  info_value_box(
+    title = "Smoking prevalence",
+    value = "10.5%",
+    type = "domain_statistic",
+    demographic_var = "smoking",
+    context = "In Queensland high school students",
+    description = statements$example_statement[[7]],
+    config = config
+  )
+)
+info_value_box_layout(boxes) # Four cards automatically become two rows of two.
+```
+# Introduction
+
+Chronic conditions, especially when they are severe, may require hospital care. They may also increase complications of other conditions and increase the need for hospital services. Analysing hospitalisation records identifies subgroups more impacted by chronic conditions and highlight prevention opportunities.  
+
+# Current status
+
+There were 3,059,985 hospitalisations in 2024–25 for a standardised rate of 48,955 per 100,000 persons. 
+
+### Demographic differences
+
+Hospitalisation rates for chronic conditions varied by age and sex in Queensland. Males typically had higher hospitalisation rates than females (coronary heart disease, stroke, diabetes, dementia and the combined lifestyle-related conditions) indicating a greater impact of these chronic diseases among men. For example, the coronary heart disease age-standardised hospitalisation rate was XXX per 100,000 persons. The male rate was XXXX than the female rate (XXXX and XXX per 100,000 in males and females, respectively). In contrast, females had higher hospitalisation rates for all causes and COPD, although differences for COPD were relatively small.
+
+Hospitalisation rates generally increased with age, with the highest rates observed among people aged 65 years and over across most chronic conditions, particularly coronary heart disease, stroke, dementia, diabetes and the combined lifestyle-related conditions. Age-related differences were especially pronounced for chronic diseases such as COPD, stroke and dementia, where hospitalisation rates in older adults were many times higher than those observed in younger age classes.
+
+### Equity differences
+Differences in hospitalisation rates by remoteness and socioeconomic disadvantage may reflect inequities in health outcomes, access to services, and exposure to risk factors associated with chronic disease.
+
+In Queensland, hospitalisation rates for most chronic conditions were higher among people living in remote and socioeconomically disadvantaged communities, with the largest disparities observed for COPD, diabetes and lifestyle-related chronic conditions. For example, COPD hospitalisation rate was XXXX in remote areas and XXX in the most disadvantaged areas compared with major cities and the most advantaged areas (XXX and XXX per 100,000 persons for remote and major cities, respectively; XXX and XXX per 100,000 persons for most disadvantaged and advantaged, respectively). In contrast, dementia showed relatively little variation by remoteness or socioeconomic disadvantage category compared with other chronic conditions.
+
+## Hospitalisations dashboard
+<iframe
+  src="https://pophealthqld-chrondis-hospcurrent-dev.share.connect.posit.cloud/"
+  title="chrondis_mort_current"
+  style="width:100%; max-width:100%; height:80vh; min-height:500px; border:0; display:block;"
+  data-external="1"
+  loading="lazy"
+  referrerpolicy="no-referrer">
+</iframe>
+
+# And so on...
